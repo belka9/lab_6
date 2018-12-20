@@ -9,26 +9,26 @@ void swap(int *a, int *b) {
     *b = x;
 }
 
-void addElement(int a[], int * n, int x) {//добавление элемента в кучу
-    a[*n] = x;
-    int p = *n;
-    *n = *n + 1;
+void addElement(int a[], int * heapSize, int x) { //РґРѕР±Р°РІР»РµРЅРёРµ СЌР»РµРјРµРЅС‚Р° РІ РєСѓС‡Сѓ
+    a[*heapSize] = x;
+    int p = *heapSize;
+    *heapSize = *heapSize + 1;
     while (a[p] < a[p / 2] && p > 0) {
         swap(&a[p], &a[p / 2]);
         p /= 2;
     }
 }
 
-int RM(int a[], int * n) {//удаление элемента из кучи
+int removeElement(int a[], int * heapSize) { //СѓРґР°Р»РµРЅРёРµ СЌР»РµРјРµРЅС‚Р° РёР· РєСѓС‡Рё
     int m = a[0];
-    a[0] = a[*n - 1];
-    *n = *n - 1;
+    a[0] = a[*heapSize - 1];
+    *heapSize = *heapSize - 1;
     int p = 0;
     int flag = 1;
-    while (2 * p <= *n && flag) {
+    while (2 * p <= *heapSize && flag) {
         flag = 0;
         int min = p * 2;
-        if (min + 1 <= *n && a[min] > a[min+1])
+        if (min + 1 <= *heapSize && a[min] > a[min+1])
             min++;
         if (a[p] > a[min]) {
             flag = 1;
@@ -39,35 +39,27 @@ int RM(int a[], int * n) {//удаление элемента из кучи
     return m;
 }
 
-void heapSort(int *a, int * heap_size, int n) {
+void heapSort(int *a, int * heapSize, int n) {
     for (int i  = 0; i < n; i++){
-        addElement(a, heap_size, a[i]);
+        addElement(a, heapSize, a[i]);
     }
     for (int i = 0; i < n; i++){
-        int el = RM(a, heap_size);
+        int el = removeElement(a, heapSize);
         printf("%d ", el);
     }
-    //for (int i = n / 2 - 1; i >= 1; i--) {
-        //swap(a, a + i);
-        //addElement(a, 0, i);
-        //RM(a, &n);
-    //}
-    //if (*a > a[1])
-        //swap(a, a + 1);
 }
 
 int main() {
-    int i = 0;
     int n = 0;
-    int heap_size = 0;
+    int heapSize = 0;
     scanf("%d", &n);
-    int * a = (int *) malloc(sizeof(int) * n);
+    int *a = (int *) malloc(sizeof(int) * n);
     if (a == NULL)
         return 1;
-    for (i; i < n; ++i)
+    for (int i = 0; i < n; ++i)
         scanf("%d", &a[i]);
 
-    heapSort(a, &heap_size, n);
-
-    return 0;
+    heapSort(a, &heapSize, n);
+    free(a);
+    return EXIT_SUCCESS;
 }
